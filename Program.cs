@@ -2,7 +2,7 @@ using AutoMapper;
 using Kosta_Task;
 using Kosta_Task.DbContexts;
 using Kosta_Task.Repository;
-using Kosta_Task.Repository.IRepository;
+using Kosta_Task.Repository.Interfaces;
 using Kosta_Task.Services;
 using Kosta_Task.Services.IServices;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +23,10 @@ SD.BaseUrl = builder.Configuration["BaseUrl"];
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddHttpClient<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddHttpClient<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
 
 //builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -47,6 +51,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
 	name: "default",
-	pattern: "{controller=Home}/{action=Index}/{id?}");
+	pattern: "{controller=Department}/{action=DepartmentIndex}/{id?}");
 
 app.Run();

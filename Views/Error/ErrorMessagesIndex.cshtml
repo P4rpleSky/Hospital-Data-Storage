@@ -1,0 +1,37 @@
+﻿@using Kosta_Task.Models.Dtos;
+@model List<string>
+
+<br />
+<br />
+<div class="container p-4 border">
+	<div class="row pb-2">
+		<div class="col">
+			<h1>Список ошибок</h1>
+		</div>
+	</div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					Номер ошибки
+				</th>
+				<th>
+					Описание
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@for (int i = 0; i < Model.Count; i++)
+			{
+					<tr>
+						<td>
+						@i + 1
+						</td>
+						<td>
+						@Model[i]
+						</td>
+					</tr>
+			}
+		</tbody>
+	</table>
+</div>

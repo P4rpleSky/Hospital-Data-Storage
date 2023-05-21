@@ -1,13 +1,13 @@
 ﻿using Kosta_Task.Models.Dtos;
-using Kosta_Task.Repository.IRepository;
+using Kosta_Task.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kosta_Task.Controllers
 {
-	[Route("api/departments")]
+	[Route("api/department")]
 	public class DepartmentAPIController : Controller
 	{
-		protected ResponseDto _response;
+		private ResponseDto _response;
 		private IDepartmentRepository _departmentRepository;
 
 		public DepartmentAPIController(IDepartmentRepository departmentRepository)

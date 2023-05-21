@@ -1,8 +1,6 @@
 ﻿@using Kosta_Task.Models.Dtos;
 @model IEnumerable<DepartmentDto>
 
-<link rel="stylesheet" href="~/css/department_tree.css" asp-append-version="true" />
-
 <br />
 <br />
 <div class="container p-4 border">
@@ -11,7 +9,7 @@
 			<h1>Список предприятий</h1>
 		</div>
 		@*<div class="col text-end pt-1">
-		<a asp-action="ProductCreate" class="btn btn-outline-primary"><i class="fas fa-plus"></i> Create New Product</a>
+			<a asp-asp-controller="Employee" asp-action="ProductCreate" class="btn btn-outline-primary"><i class="fas fa-plus"></i> Create New Product</a>
 		</div>*@
 	</div>
 	<table class="table">
@@ -37,7 +35,9 @@
 			{
 				<tr>
 					<td>
-						@(item.Id.ToString())
+						<a asp-controller="Employee" asp-action="EmployeeIndex" asp-route-departmentId="@item.Id">
+							@item.Id.ToString()
+						</a>
 					</td>
 					<td>
 						@(item.ParentDepartmentId is null? "-" : item.ParentDepartmentId.ToString())

@@ -1,0 +1,82 @@
+﻿@using Kosta_Task.Models.Dtos;
+@model IEnumerable<EmployeeDto>
+
+<br />
+<br />
+<div class="container p-4 border">
+	<div class="row pb-2">
+		<div class="col-md-10">
+			<h1>Список сотрудников отдела @(Context.Request.Query["departmentId"])</h1>
+		</div>
+		<div class="col-md-2 text-end">
+			<a asp-controller="Employee" asp-action="EmployeeCreate" asp-route-departmentId="@(Context.Request.Query["departmentId"])" class="btn btn-outline-primary">Добавить нового сотрудника</a>
+		</div>
+	</div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					Id
+				</th>
+				<th>
+					ФИО
+				</th>
+				<th>
+					Возраст
+				</th>
+				<th>
+					Дата рождения
+				</th>
+				<th>
+					Серия и номер паспорта
+				</th>
+				<th>
+					Должность
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@item.Id
+					</td>
+					<td>
+						@(string.Join(" ", item.SurName, item.FirstName, item.Patronymic is null? "" : item.Patronymic))
+					</td>
+					<td>
+						@item.Age
+					</td>
+					<td>
+						@item.DateOfBirth.ToShortDateString()
+					</td>
+					<td>
+						@(string.Join(" ",
+							item.DocSeries is null ? "____" : item.DocSeries,
+							item.DocNumber is null ? "______" : item.DocNumber))
+					</td>
+					<td>
+						@item.Position
+					</td>
+					<td>
+						<a asp-action="EmployeeEdit" class="btn btn-success" asp-route-employeeId="@item.Id">
+							<i class="fas fa-edit"></i>
+						</a>
+						<a asp-action="EmployeeDelete" class="btn btn-danger" asp-route-employeeId="@item.Id">
+							<i class="fas fa-trash"></i>
+						</a>
+@*						<a class="btn btn-success">
+							<i class="fas fa-edit"></i>
+						</a>
+						<a class="btn btn-danger">
+							<i class="fas fa-trash"></i>
+						</a>*@
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+

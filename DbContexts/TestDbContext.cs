@@ -18,7 +18,7 @@ public partial class TestDbContext : DbContext
 
     public virtual DbSet<Department> Departments { get; set; }
 
-    public virtual DbSet<Employee> Empoyees { get; set; }
+    public virtual DbSet<Employee> Employees { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -40,7 +40,7 @@ public partial class TestDbContext : DbContext
 
         modelBuilder.Entity<Employee>(entity =>
         {
-            entity.ToTable("Empoyee");
+            entity.ToTable("Employee");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd()

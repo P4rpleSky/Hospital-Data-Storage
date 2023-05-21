@@ -1,6 +1,6 @@
 ﻿using Kosta_Task.Models.Dtos;
 
-namespace Kosta_Task.Repository.IRepository
+namespace Kosta_Task.Repository.Interfaces
 {
     public interface IDepartmentRepository
     {

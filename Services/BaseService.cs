@@ -50,6 +50,10 @@ namespace Kosta_Task.Services
 				apiResponse = await client.SendAsync(message);
 
 				var apiContent = await apiResponse.Content.ReadAsStringAsync();
+
+				if (!apiResponse.IsSuccessStatusCode)
+					throw new Exception(apiContent);
+
 				var apiResponseDto = JsonConvert.DeserializeObject<ResponseDto>(apiContent);
 				return apiResponseDto;
 			}

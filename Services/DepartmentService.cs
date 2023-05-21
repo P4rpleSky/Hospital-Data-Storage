@@ -18,7 +18,7 @@ namespace Kosta_Task.Services
 			return await this.SendAsync(new ApiRequest
 			{
 				ApiType = SD.ApiType.GET,
-				Url = SD.BaseUrl + "api/departments"
+				Url = SD.BaseUrl + "api/department"
 			});
 		}
 	}

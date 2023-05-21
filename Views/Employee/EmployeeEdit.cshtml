@@ -1,0 +1,84 @@
+﻿@model Kosta_Task.Models.Dtos.EmployeeDto
+
+
+<form asp-action="EmployeeEdit">
+    @Html.Hidden("Id")
+    @Html.Hidden("DepartmentId")
+    <br />
+    <div class="container border p-3">
+        <h1 class="text-primary">Добавить сотрудника</h1>
+
+        <hr />
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="col-2">
+                <label asp-for="SurName" class="control-label pt-2" style="font-size:20px;">Фамилия</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="SurName" class="form-control" />
+                <span asp-validation-for="SurName" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="FirstName" class="control-label pt-2" style="font-size:20px;">Имя</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Patronymic" class="control-label pt-2" style="font-size:20px;">Отчество</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Patronymic" class="form-control" />
+                <span asp-validation-for="Patronymic" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="DateOfBirth" class="control-label pt-2" style="font-size:20px;">Дата рождения</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="DateOfBirth" class="form-control" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="DocSeries" class="control-label pt-2" style="font-size:20px;">Cерия паспорта</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="DocSeries" class="form-control" />
+                <span asp-validation-for="DocSeries" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="DocNumber" class="control-label pt-2" style="font-size:20px;">Номер паспорта</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="DocNumber" class="form-control" />
+                <span asp-validation-for="DocNumber" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Position" class="control-label pt-2" style="font-size:20px;">Должность</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Position" class="form-control" />
+                <span asp-validation-for="Position" class="text-danger"></span>
+            </div>
+
+            <div class="col-5 offset-2">
+                <a asp-action="ProductIndex" asp-route-departmentId="@(Context.Request.Query["departmentId"])" class="btn-primary btn form-control ">Назад к списку</a>
+            </div>
+            <div class="col-5">
+                <input type="submit" value="Обновить" class="btn btn-success form-control" />
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -10,8 +10,13 @@ namespace Kosta_Task
 		{
 			var mappingConfig = new MapperConfiguration(config =>
 			{
-				config.CreateMap<DepartmentDto, Department>();
-				config.CreateMap<Department, DepartmentDto>();
+				config.CreateMap<DepartmentDto, Department>().ReverseMap();
+				config.CreateMap<Employee, EmployeeDto>()
+					.AfterMap((employee, employeeDto) =>
+					{
+						employeeDto.Age = (int)(DateTime.Now.Subtract(employee.DateOfBirth).TotalDays / 365);
+					})
+					.ReverseMap();
 			});
 
 			return mappingConfig;
