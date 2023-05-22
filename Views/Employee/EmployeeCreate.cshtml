@@ -47,7 +47,7 @@
                 <label asp-for="DocSeries" class="control-label pt-2" style="font-size:20px;">Cерия паспорта</label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="DocSeries" class="form-control" />
+                <input asp-for="DocSeries" placeholder="До 4 символов" class="form-control" />
                 <span asp-validation-for="DocSeries" class="text-danger"></span>
             </div>
 
@@ -55,7 +55,7 @@
                 <label asp-for="DocNumber" class="control-label pt-2" style="font-size:20px;">Номер паспорта</label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="DocNumber" class="form-control" />
+                <input asp-for="DocNumber" placeholder="До 6 символов" class="form-control" />
                 <span asp-validation-for="DocNumber" class="text-danger"></span>
             </div>
 
@@ -68,7 +68,7 @@
             </div>
 
             <div class="col-5 offset-2">
-                <a asp-action="ProductIndex" asp-route-departmentId="@(Context.Request.Query["departmentId"])" class="btn-primary btn form-control ">Назад к списку</a>
+                <a asp-action="EmployeeIndex" asp-route-departmentId="@Context.Request.Query["departmentId"]" class="btn-primary btn form-control ">Назад к списку</a>
             </div>
             <div class="col-5">
                 <input type="submit" value="Создать" class="btn btn-success form-control" />

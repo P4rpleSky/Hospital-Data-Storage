@@ -6,7 +6,7 @@ namespace Kosta_Task.Repository.Interfaces
     {
         Task<IEnumerable<EmployeeDto>> GetEmployeesByDepartmentIdAsync(Guid departmentId);
         Task<EmployeeDto> GetEmployeeByIdAsync(decimal employeeId);
-		Task<bool> DeleteEmployeeAsync(int employeeId);
+		Task<bool> DeleteEmployeeByIdAsync(decimal employeeId);
 		Task<EmployeeDto> CreateUpdateEmployeeAsync(EmployeeDto employeeDto);
 	}
 }

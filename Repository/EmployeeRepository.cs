@@ -20,7 +20,12 @@ namespace Kosta_Task.Repository
 
 		public async Task<EmployeeDto> CreateUpdateEmployeeAsync(EmployeeDto employeeDto)
 		{
-			var employee = _mapper.Map<EmployeeDto, Employee>(employeeDto);
+			if (employeeDto.DateOfBirth > DateTime.Now)
+			{
+				throw new InvalidOperationException("Дата рождения не может быть позднее текущей!");
+			}
+
+            var employee = _mapper.Map<EmployeeDto, Employee>(employeeDto);
 			if (employee.Id > 0)
 			{
 				_db.Employees.Update(employee);
@@ -40,7 +45,7 @@ namespace Kosta_Task.Repository
 			return _mapper.Map<Employee, EmployeeDto>(employee);
 		}
 
-		public async Task<bool> DeleteEmployeeAsync(int employeeId)
+		public async Task<bool> DeleteEmployeeByIdAsync(decimal employeeId)
 		{
 			var employee = await _db.Employees
 				.FirstOrDefaultAsync(x => x.Id == employeeId);

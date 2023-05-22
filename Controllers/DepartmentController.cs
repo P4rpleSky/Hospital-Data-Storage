@@ -21,19 +21,11 @@ namespace Kosta_Task.Controllers
 		{
 			var departmentsList = new List<DepartmentDto>();
 			var response = await _departmentService.GetDepartmentsAsync();
-			if (response is null || response.IsSuccess == false)
+			if (response is not null && response.IsSuccess)
 			{
-				return RedirectToAction(
-					nameof(ErrorController.ErrorMessagesIndex), nameof(ErrorController),
-					new
-					{
-						errorMessages = response is null ?
-							new List<string> { "API response is null!" } : 
-							response.ErrorMessages
-					});
-			}
-			departmentsList = JsonConvert.DeserializeObject<List<DepartmentDto>>(
-				response.Result.ToString());
+                departmentsList = JsonConvert.DeserializeObject<List<DepartmentDto>>(
+					response.Result.ToString());
+            }
 			return View(departmentsList);
 		}
     }

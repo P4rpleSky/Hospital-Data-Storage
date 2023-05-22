@@ -33,7 +33,7 @@ namespace Kosta_Task.Services
             });
         }
 
-        public async Task<ResponseDto> DeleteEmployeeAsync(int employeeId)
+        public async Task<ResponseDto> DeleteEmployeeByIdAsync(decimal employeeId)
 		{
 			return await this.SendAsync(new ApiRequest
 			{

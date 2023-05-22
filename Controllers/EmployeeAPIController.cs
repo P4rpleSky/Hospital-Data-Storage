@@ -81,20 +81,20 @@ namespace Kosta_Task.Controllers
 			return _response;
 		}
 
-		//[HttpDelete]
-		//public async Task<ResponseDto> Delete([FromBody] EmployeeDto employeeDto)
-		//{
-		//	try
-		//	{
-		//		var departmentDtos = await _employeeRepository.CreateUpdateEmployeeAsync(employeeDto);
-		//		_response.Result = departmentDtos;
-		//	}
-		//	catch (Exception ex)
-		//	{
-		//		_response.IsSuccess = false;
-		//		_response.ErrorMessages.Add(ex.ToString());
-		//	}
-		//	return _response;
-		//}
+		[HttpDelete("employeeId={employeeId:decimal}")]
+		public async Task<ResponseDto> Delete(decimal employeeId)
+		{
+			try
+			{
+				var departmentDtos = await _employeeRepository.DeleteEmployeeByIdAsync(employeeId);
+				_response.Result = departmentDtos;
+			}
+			catch (Exception ex)
+			{
+				_response.IsSuccess = false;
+				_response.ErrorMessages.Add(ex.ToString());
+			}
+			return _response;
+		}
 	}
 }

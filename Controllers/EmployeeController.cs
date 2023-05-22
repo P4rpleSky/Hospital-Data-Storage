@@ -19,18 +19,10 @@ namespace Kosta_Task.Controllers
         {
             var employeesList = new List<EmployeeDto>();
             var response = await _employeeService.GetEmployeesByDepartmentIdAsync(departmentId);
-            if (response is null || response.IsSuccess == false)
+            if (response is not null && response.IsSuccess)
             {
-                return RedirectToAction(
-                    nameof(ErrorController.ErrorMessagesIndex), nameof(ErrorController),
-                    new
-                    {
-                        errorMessages = response is null ?
-                        new List<string> { "API response is null!" } :
-                        response.ErrorMessages
-                    });
+                employeesList = JsonConvert.DeserializeObject<List<EmployeeDto>>(response.Result.ToString());
             }
-            employeesList = JsonConvert.DeserializeObject<List<EmployeeDto>>(response.Result.ToString());
             return View(employeesList);
         }
 
@@ -45,40 +37,20 @@ namespace Kosta_Task.Controllers
         {
             if (ModelState.IsValid)
             {
-                //employeeDto.DepartmentId = departmentId;
                 var response = await _employeeService.CreateEmployeeAsync(employeeDto);
-                if (response is null || response.IsSuccess == false)
+                if (response is not null && response.IsSuccess)
                 {
-                    return RedirectToAction(
-                        nameof(ErrorController.ErrorMessagesIndex), nameof(ErrorController),
-                        new
-                        {
-                            errorMessages = response is null ?
-                                new List<string> { "API response is null!" } :
-                                response.ErrorMessages
-                        });
+                    return RedirectToAction(nameof(EmployeeIndex), new { departmentId = employeeDto.DepartmentId });
                 }
-                return RedirectToAction(nameof(EmployeeIndex), new { departmentId = employeeDto.DepartmentId });
             }
             return View(employeeDto);
         }
 
         public async Task<IActionResult> EmployeeEdit(decimal employeeId)
         {
-            if (ModelState.IsValid)
+            var response = await _employeeService.GetEmployeeByIdAsync(employeeId);
+            if (response is not null && response.IsSuccess)
             {
-                var response = await _employeeService.GetEmployeeByIdAsync(employeeId);
-                if (response is null || response.IsSuccess == false || response.Result is null)
-                {
-                    return RedirectToAction(
-                        nameof(ErrorController), nameof(ErrorController.ErrorMessagesIndex),
-                        new
-                        {
-                            errorMessages = response is null || !response.ErrorMessages.Any() ?
-                                new List<string> { "API response is null!" } :
-                                response.ErrorMessages
-                        });
-                }
                 var employeeDto = JsonConvert.DeserializeObject<EmployeeDto>(response.Result.ToString());
                 return View(employeeDto);
             }
@@ -92,20 +64,35 @@ namespace Kosta_Task.Controllers
             if (ModelState.IsValid)
             {
                 var response = await _employeeService.UpdateEmployeeAsync(employeeDto);
-                if (response is null || response.IsSuccess == false)
+                if (response is not null && response.IsSuccess)
                 {
-                    return RedirectToAction(
-                        nameof(ErrorController), nameof(ErrorController.ErrorMessagesIndex),
-                        new
-                        {
-                            errorMessages = response is null ?
-                                new List<string> { "API response is null!" } :
-                                response.ErrorMessages
-                        });
+                    return RedirectToAction(nameof(EmployeeIndex), new { departmentId = employeeDto.DepartmentId });
                 }
-                return RedirectToAction(nameof(EmployeeIndex), new { departmentId = employeeDto.DepartmentId });
             }
             return View(employeeDto);
+        }
+
+        public async Task<IActionResult> EmployeeDelete(decimal employeeId)
+        {
+            var response = await _employeeService.GetEmployeeByIdAsync(employeeId);
+            if (response is not null && response.IsSuccess)
+            {
+                var employeeDto = JsonConvert.DeserializeObject<EmployeeDto>(response.Result.ToString());
+                return View(employeeDto);
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EmployeeDelete(EmployeeDto employeeDto)
+        {
+            var response = await _employeeService.DeleteEmployeeByIdAsync(employeeDto.Id);
+            if (response is not null && response.IsSuccess)
+            {
+                return RedirectToAction(nameof(EmployeeIndex), new { departmentId = employeeDto.DepartmentId });
+            }
+            return NotFound();
         }
     }
 }
