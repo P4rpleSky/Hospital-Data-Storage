@@ -1,64 +1,50 @@
 ﻿@using Kosta_Task.Models.Dtos;
 @model IEnumerable<DepartmentDto>
 
-<br />
-<br />
-<div class="container p-4 border">
-	<div class="row pb-2">
-		<div class="col">
-			<h1>Список предприятий</h1>
-		</div>
-		@*<div class="col text-end pt-1">
-			<a asp-asp-controller="Employee" asp-action="ProductCreate" class="btn btn-outline-primary"><i class="fas fa-plus"></i> Create New Product</a>
-		</div>*@
-	</div>
-	<table class="table">
-		<thead>
-			<tr>
-				<th>
-					Id
-				</th>
-				<th>
-					Родительское предприятие
-				</th>
-				<th>
-					Код
-				</th>
-				<th>
-					Имя
-				</th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var item in Model)
-			{
-				<tr>
-					<td>
-						<a asp-controller="Employee" asp-action="EmployeeIndex" asp-route-departmentId="@item.Id">
-							@item.Id.ToString()
-						</a>
-					</td>
-					<td>
-						@(item.ParentDepartmentId is null? "-" : item.ParentDepartmentId.ToString())
-					</td>
-					<td>
-						@(item.Code)
-					</td>
-					<td>
-						@(item.Name)
-					</td>
-					@*<td>
-						<a asp-action="ProductEdit" class="btn btn-success" asp-route-productId="@item.ProductId">
-							<i class="fas fa-edit"></i>
-						</a>
-						<a asp-action="ProductDelete" class="btn btn-danger" asp-route-productId="@item.ProductId">
-							<i class="fas fa-trash"></i>
-						</a>
-					</td>*@
-				</tr>
-			}
-		</tbody>
-	</table>
-</div>
+<link rel="stylesheet" href="~/css/department_tree.css" />
 
+
+<div>
+    <ul class="tree">
+        @functions {
+            async Task ShowTree(IEnumerable<DepartmentDto> departmentDtos, Guid parentId)
+            {
+                <ul>
+                    @foreach (var departmentDto in departmentDtos.Where(x => x.ParentDepartmentId == parentId))
+                    {
+                        <li>
+                            @if (departmentDtos.Any(x => x.ParentDepartmentId == departmentDto.Id))
+                            {
+                                <details>
+                                    <summary><a asp-controller="Employee" asp-action="EmployeeIndex" asp-route-departmentId="@departmentDto.Id">@departmentDto.Name</a></summary>
+                                    @{
+                                        await ShowTree(departmentDtos, departmentDto.Id);
+                                    }
+                                </details>
+                            }
+                            else
+                            {
+                                <a asp-controller="Employee" asp-action="EmployeeIndex" asp-route-departmentId="@departmentDto.Id">@departmentDto.Name</a>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+        }
+
+        @{
+            var departmentDtos = Model;
+            var rootDepartmentDto = departmentDtos.First(x => x.ParentDepartmentId is null);
+        }
+
+        <li>
+            <details open>
+				<summary>@(rootDepartmentDto.Name)</summary>
+                @{
+                    await ShowTree(Model, rootDepartmentDto.Id);
+			    }
+            </details>
+        </li>
+        
+    </ul>
+</div>

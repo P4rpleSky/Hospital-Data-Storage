@@ -1,0 +1,38 @@
+﻿@page
+@using Kosta_Task.Models.Dtos;
+@model Kosta_Task.Pages.DepartmentTreeModel
+
+<link rel="stylesheet" href="~/css/department_tree.css" />
+
+
+<div>
+    <ul class="tree">
+        @{
+            var departmentDtos = Model.DepartmentDtos as List<DepartmentDto>;
+            void ShowTree(IEnumerable<DepartmentDto> departmentDtos, Guid parentId)
+            {
+                    <ul>
+                        @foreach (var departmentDto in departmentDtos.Where(x => x.ParentDepartmentId == parentId))
+                        {
+                            <li>
+                                <div class="sticky">
+                                    @departmentDto.Name
+                                </div>
+                                @if (departmentDtos.Any(x => x.ParentDepartmentId == departmentDto.Id))
+                                {
+                                    ShowTree(departmentDtos, departmentDto.Id);
+                                }
+                            </li>
+                        }
+                    </ul>
+            }
+
+            var rootDepartmentDto = departmentDtos.First(x => x.ParentDepartmentId is null);
+            <li>
+                <div class="sticky">@(rootDepartmentDto.Name)</div>
+                ShowTree(Model, rootDepartmentDto.Id)
+            </li>
+        }
+    </ul>
+</div>
+

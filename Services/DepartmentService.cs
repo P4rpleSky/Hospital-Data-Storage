@@ -13,7 +13,35 @@ namespace Kosta_Task.Services
 			_clientFactory = clientFactory;
 		}
 
-		public async Task<ResponseDto> GetDepartmentsAsync()
+        public async Task<ResponseDto> CreateDepartmentAsync(DepartmentDto departmentDto)
+        {
+            return await this.SendAsync(new ApiRequest
+            {
+                ApiType = SD.ApiType.POST,
+                Data= departmentDto,
+                Url = SD.BaseUrl + "api/department"
+            });
+        }
+
+        public async Task<ResponseDto> DeleteDepartmentByIdAsync(Guid departmentId)
+        {
+            return await this.SendAsync(new ApiRequest
+            {
+                ApiType = SD.ApiType.DELETE,
+                Url = SD.BaseUrl + $"api/department/departmentId={departmentId}"
+            });
+        }
+
+        public async Task<ResponseDto> GetDepartmentByIdAsync(Guid departmentId)
+        {
+            return await this.SendAsync(new ApiRequest
+            {
+                ApiType = SD.ApiType.GET,
+                Url = SD.BaseUrl + $"api/department/departmentId={departmentId}"
+            });
+        }
+
+        public async Task<ResponseDto> GetDepartmentsAsync()
 		{
 			return await this.SendAsync(new ApiRequest
 			{
@@ -21,5 +49,15 @@ namespace Kosta_Task.Services
 				Url = SD.BaseUrl + "api/department"
 			});
 		}
-	}
+
+        public async Task<ResponseDto> UpdateDepartmentAsync(DepartmentDto departmentDto)
+        {
+            return await this.SendAsync(new ApiRequest
+            {
+                ApiType = SD.ApiType.PUT,
+                Data = departmentDto,
+                Url = SD.BaseUrl + "api/department"
+            });
+        }
+    }
 }

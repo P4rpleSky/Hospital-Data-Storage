@@ -1,0 +1,53 @@
+﻿@model Kosta_Task.Models.Dtos.DepartmentDto
+
+
+<form asp-action="DepartmentEdit">
+    @Html.Hidden("Id")
+    <br />
+    <div class="container border p-3">
+        <h1 class="text-primary">Редактировать отдел</h1>
+
+        <hr />
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="col-2">
+                <label asp-for="Name" class="control-label pt-2" style="font-size:20px;">Наименование</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Code" class="control-label pt-2" style="font-size:20px;">Мнемокод</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="ParentDepartmentId" class="control-label pt-2" style="font-size:20px;">ID родительского подразделения</label>
+            </div>
+            <div class="col-10 pb-3">
+                <select asp-for="Code" class="form-control">
+                    
+                </select>
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+
+            <div class="col-5 offset-2">
+                <a asp-action="EmployeeIndex" asp-route-departmentId="@Model.ParentDepartmentId" class="btn-primary btn form-control ">Назад к списку</a>
+            </div>
+            <div class="col-5">
+                <input type="submit" value="Обновить" class="btn btn-success form-control" />
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

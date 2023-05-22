@@ -1,0 +1,70 @@
+﻿@model Kosta_Task.Models.Dtos.EmployeeDto
+
+
+<form asp-action="EmployeeDelete">
+    @Html.Hidden("Id")
+    @Html.Hidden("DepartmentId")
+    <br />
+    <div class="container border p-3">
+        <h1 class="text-primary">Удалить сотрудника</h1>
+
+        <hr />
+        <div class="row">
+            <div class="col-2">
+                <label asp-for="SurName" class="control-label pt-2" style="font-size:20px;">Фамилия</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="SurName" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="FirstName" class="control-label pt-2" style="font-size:20px;">Имя</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="FirstName" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Patronymic" class="control-label pt-2" style="font-size:20px;">Отчество</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Patronymic" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="DateOfBirth" class="control-label pt-2" style="font-size:20px;">Дата рождения</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="DateOfBirth" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="DocSeries" class="control-label pt-2" style="font-size:20px;">Cерия паспорта</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="DocSeries" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="DocNumber" class="control-label pt-2" style="font-size:20px;">Номер паспорта</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="DocNumber" disabled class="form-control" />
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Position" class="control-label pt-2" style="font-size:20px;">Должность</label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Position" disabled class="form-control" />
+            </div>
+
+            <div class="col-5 offset-2">
+                <a asp-action="EmployeeIndex" asp-route-departmentId="@Model.DepartmentId" class="btn-primary btn form-control ">Назад к списку</a>
+            </div>
+            <div class="col-5">
+                <input type="submit" value="Удалить" class="btn btn-danger form-control" />
+            </div>
+        </div>
+    </div>
+</form>

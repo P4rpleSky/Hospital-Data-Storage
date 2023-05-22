@@ -1,5 +1,6 @@
 ﻿using Kosta_Task.Models;
 using Kosta_Task.Models.Dtos;
+using Kosta_Task.Services;
 using Kosta_Task.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -9,15 +10,22 @@ namespace Kosta_Task.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeService _employeeService;
+        private readonly IDepartmentService _departmentService;
 
-        public EmployeeController(IEmployeeService employeeService)
+        public EmployeeController(IEmployeeService employeeService, IDepartmentService departmentService)
         {
+            _departmentService = departmentService;
             _employeeService = employeeService;
         }
 
 		public async Task<IActionResult> EmployeeIndex(Guid departmentId)
         {
             var employeesList = new List<EmployeeDto>();
+            var departmentResponse = await _departmentService.GetDepartmentByIdAsync(departmentId);
+            if (departmentResponse is null || !departmentResponse.IsSuccess)
+            {
+                return NotFound();
+            }
             var response = await _employeeService.GetEmployeesByDepartmentIdAsync(departmentId);
             if (response is not null && response.IsSuccess)
             {

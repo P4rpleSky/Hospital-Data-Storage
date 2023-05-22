@@ -58,7 +58,7 @@ public partial class TestDbContext : DbContext
             entity.HasOne(d => d.Department).WithMany(p => p.Empoyees)
                 .HasForeignKey(d => d.DepartmentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Empoyee_DepatmentId");
+                .HasConstraintName("FK_Employee_DepatmentId");
         });
 
         OnModelCreatingPartial(modelBuilder);

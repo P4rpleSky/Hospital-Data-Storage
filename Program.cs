@@ -29,7 +29,7 @@ builder.Services.AddHttpClient<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
 
-//builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddRazorPages();
 
 builder.Services.AddControllersWithViews();
 
@@ -52,5 +52,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
 	name: "default",
 	pattern: "{controller=Department}/{action=DepartmentIndex}/{id?}");
+
+app.MapRazorPages();
 
 app.Run();
