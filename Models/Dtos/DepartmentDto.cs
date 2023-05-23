@@ -10,10 +10,12 @@
 
 		public Guid? ParentDepartmentId { get; set; }
 
-		//public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
+        public string? ParentDepartmentName { get; set; }
 
-		//public virtual ICollection<Department> InverseParentDepartment { get; set; } = new List<Department>();
+        //public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
 
-		//public virtual Department? ParentDepartment { get; set; }
-	}
+        //public virtual ICollection<Department> InverseParentDepartment { get; set; } = new List<Department>();
+
+        //public virtual Department? ParentDepartment { get; set; }
+    }
 }

@@ -1,74 +1,48 @@
-﻿@model Kosta_Task.Models.Dtos.EmployeeDto
+﻿@using Kosta_Task.Models.Dtos;
+@model DepartmentRazorDto
 
 
-<form asp-action="EmployeeCreate">
-    @Html.Hidden("DepartmentId", Context.Request.Query["departmentId"])
+<form asp-action="DepartmentCreate">
+    @Html.Hidden("DepartmentDto.Id")
+    @Html.Hidden("DepartmentDtosList", Model.DepartmentDtosList)
     <br />
     <div class="container border p-3">
-        <h1 class="text-primary">Добавить сотрудника</h1>
+        <h1 class="text-primary">Добавить отдел</h1>
 
         <hr />
         <div class="row">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="col-2">
-                <label asp-for="SurName" class="control-label pt-2" style="font-size:20px;">Фамилия</label>
+                <label asp-for="DepartmentDto.Name" class="control-label pt-2" style="font-size:20px;">Наименование</label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="SurName" class="form-control" />
-                <span asp-validation-for="SurName" class="text-danger"></span>
+                <input asp-for="DepartmentDto.Name" class="form-control" />
+                <span asp-validation-for="DepartmentDto.Name" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="FirstName" class="control-label pt-2" style="font-size:20px;">Имя</label>
+                <label asp-for="DepartmentDto.Code" class="control-label pt-2" style="font-size:20px;">Мнемокод</label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+                <input asp-for="DepartmentDto.Code" placeholder="До 10 символов" class="form-control" />
+                <span asp-validation-for="DepartmentDto.Code" class="text-danger"></span>
             </div>
 
             <div class="col-2">
-                <label asp-for="Patronymic" class="control-label pt-2" style="font-size:20px;">Отчество</label>
+                <label asp-for="DepartmentDto.ParentDepartmentName" class="control-label pt-2" style="font-size:20px;">ID родительского подразделения</label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="Patronymic" class="form-control" />
-                <span asp-validation-for="Patronymic" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="DateOfBirth" class="control-label pt-2" style="font-size:20px;">Дата рождения</label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="DateOfBirth" class="form-control" />
-                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="DocSeries" class="control-label pt-2" style="font-size:20px;">Cерия паспорта</label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="DocSeries" placeholder="До 4 символов" class="form-control" />
-                <span asp-validation-for="DocSeries" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="DocNumber" class="control-label pt-2" style="font-size:20px;">Номер паспорта</label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="DocNumber" placeholder="До 6 символов" class="form-control" />
-                <span asp-validation-for="DocNumber" class="text-danger"></span>
-            </div>
-
-            <div class="col-2">
-                <label asp-for="Position" class="control-label pt-2" style="font-size:20px;">Должность</label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="Position" class="form-control" />
-                <span asp-validation-for="Position" class="text-danger"></span>
+                <select asp-for="DepartmentDto.ParentDepartmentName" class="form-control">
+                    @foreach(var departmentDto in Model.DepartmentDtosList)
+                    {
+                        <option>@departmentDto.Name</option>
+                    }
+                </select>
             </div>
 
             <div class="col-5 offset-2">
-                <a asp-action="EmployeeIndex" asp-route-departmentId="@Context.Request.Query["departmentId"]" class="btn-primary btn form-control ">Назад к списку</a>
+                <a asp-action="DepartmentIndex" class="btn-primary btn form-control ">Назад к списку</a>
             </div>
             <div class="col-5">
                 <input type="submit" value="Создать" class="btn btn-success form-control" />

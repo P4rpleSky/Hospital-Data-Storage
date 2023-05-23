@@ -1,6 +1,25 @@
 ﻿.tree {
-    --spacing: 1.5rem;
-    --radius: 10px;
+    --spacing: 38px;
+    --radius: 16px;
+    --icon_radius: 38px;
+}
+
+.li-item {
+    /*height: 21px;*/
+    display: flex;
+    flex-direction: row;
+    font-size: 24px;
+    justify-content: flex-start;
+    align-items:center;
+    gap: 10px;
+}
+
+.redirect-button {
+    text-decoration: none;
+}
+
+.icon-btn {
+    height: 38px
 }
 
 .tree li {
@@ -16,6 +35,7 @@
 
 .tree ul li {
     border-left: 2px solid #ddd;
+    margin-top: 10px;
 }
 
 .tree ul li:last-child {
@@ -26,10 +46,10 @@
     content: '';
     display: block;
     position: absolute;
-    top: calc(var(--spacing) / -2);
+    top: calc(var(--icon_radius) / -2);
     left: -2px;
     width: calc(var(--spacing) + 2px);
-    height: calc(var(--spacing) + 1px);
+    height: calc(var(--spacing) + 2px);
     border: solid #ddd;
     border-width: 0 0 2px 2px;
 }
@@ -68,7 +88,7 @@
 .tree summary::before {
     content: '+';
     z-index: 1;
-    background: #696;
+    background: #198754;
     color: #fff;
     line-height: calc(2 * var(--radius) - 2px);
     text-align: center;

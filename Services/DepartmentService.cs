@@ -50,6 +50,15 @@ namespace Kosta_Task.Services
 			});
 		}
 
+        public async Task<ResponseDto> GetDepartmentsExceptChildrenAsync(Guid departmentId)
+        {
+            return await this.SendAsync(new ApiRequest
+            {
+                ApiType = SD.ApiType.GET,
+                Url = SD.BaseUrl + $"api/department/parentId={departmentId}"
+            });
+        }
+
         public async Task<ResponseDto> UpdateDepartmentAsync(DepartmentDto departmentDto)
         {
             return await this.SendAsync(new ApiRequest

@@ -53,6 +53,4 @@ app.MapControllerRoute(
 	name: "default",
 	pattern: "{controller=Department}/{action=DepartmentIndex}/{id?}");
 
-app.MapRazorPages();
-
 app.Run();

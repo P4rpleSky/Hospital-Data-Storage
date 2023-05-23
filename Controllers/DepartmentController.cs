@@ -2,11 +2,11 @@
 using Kosta_Task.Models.Dtos;
 using Kosta_Task.Services;
 using Kosta_Task.Services.IServices;
-using Kosta_Task.Pages;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Azure;
 
 namespace Kosta_Task.Controllers
 {
@@ -32,72 +32,99 @@ namespace Kosta_Task.Controllers
 
         public async Task<IActionResult> DepartmentCreate()
         {
-            var departmentsList = new List<DepartmentDto>();
+            var departmentDtos = new List<DepartmentDto>();
             var response = await _departmentService.GetDepartmentsAsync();
             if (response is not null && response.IsSuccess)
             {
-                departmentsList = JsonConvert.DeserializeObject<List<DepartmentDto>>(response.Result.ToString());
+                departmentDtos = JsonConvert.DeserializeObject<List<DepartmentDto>>(response.Result.ToString());
             }
-            return View(departmentsList);
+            var departmentRazorDto = new DepartmentRazorDto
+            {
+                DepartmentDto = new DepartmentDto(),
+                DepartmentDtosList = departmentDtos
+            };
+            return View(departmentRazorDto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DepartmentCreate(DepartmentDto departmentDto)
+        public async Task<IActionResult> DepartmentCreate(DepartmentRazorDto model)
         {
             if (ModelState.IsValid)
             {
-                var response = await _departmentService.CreateDepartmentAsync(departmentDto);
+                var response = await _departmentService.CreateDepartmentAsync(model.DepartmentDto);
                 if (response is not null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(DepartmentIndex));
                 }
             }
-            return View(departmentDto);
+            return View(model);
         }
 
         public async Task<IActionResult> DepartmentEdit(Guid departmentId)
         {
-            var response = await _departmentService.GetDepartmentByIdAsync(departmentId);
-            if (response is not null && response.IsSuccess)
+            var departmentResponse = await _departmentService.GetDepartmentByIdAsync(departmentId);
+            var departmentDtos = new List<DepartmentDto>();
+            var departmentsListResponse = await _departmentService.GetDepartmentsExceptChildrenAsync(departmentId);
+            if (departmentResponse is not null && departmentResponse.IsSuccess &&
+                departmentsListResponse is not null && departmentsListResponse.IsSuccess)
             {
-                var departmentDto = JsonConvert.DeserializeObject<DepartmentDto>(response.Result.ToString());
-                return View(departmentDto);
+                departmentDtos = JsonConvert.DeserializeObject<List<DepartmentDto>>(departmentsListResponse.Result.ToString());
+                var departmentDto = JsonConvert.DeserializeObject<DepartmentDto>(departmentResponse.Result.ToString());
+                var departmentRazorDto = new DepartmentRazorDto
+                {
+                    DepartmentDto = departmentDto,
+                    DepartmentDtosList = departmentDtos
+                };
+                return View(departmentRazorDto);
             }
-            return NotFound();
+            return NotFound();            
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DepartmentEdit(DepartmentDto departmentDto)
+        public async Task<IActionResult> DepartmentEdit(DepartmentRazorDto model)
         {
             if (ModelState.IsValid)
             {
-                var response = await _departmentService.CreateDepartmentAsync(departmentDto);
+                var response = await _departmentService.CreateDepartmentAsync(model.DepartmentDto);
                 if (response is not null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(DepartmentIndex));
                 }
             }
-            return View(departmentDto);
+            return View(model);
         }
 
         public async Task<IActionResult> DepartmentDelete(Guid departmentId)
         {
-            var response = await _departmentService.GetDepartmentByIdAsync(departmentId);
-            if (response is not null && response.IsSuccess)
+            var departmentResponse = await _departmentService.GetDepartmentByIdAsync(departmentId);
+            var departmentDtos = new List<DepartmentDto>();
+            var departmentsListResponse = await _departmentService.GetDepartmentsAsync();
+            if (departmentResponse is not null && departmentResponse.IsSuccess &&
+                departmentsListResponse is not null && departmentsListResponse.IsSuccess)
             {
-                var departmentDto = JsonConvert.DeserializeObject<DepartmentDto>(response.Result.ToString());
-                return View(departmentDto);
+                departmentDtos = JsonConvert.DeserializeObject<List<DepartmentDto>>(departmentsListResponse.Result.ToString());
+                var departmentDto = JsonConvert.DeserializeObject<DepartmentDto>(departmentResponse.Result.ToString());
+
+                if (departmentDto.ParentDepartmentId is null)
+                    return NotFound();
+
+                var departmentRazorDto = new DepartmentRazorDto
+                {
+                    DepartmentDto = departmentDto,
+                    DepartmentDtosList = departmentDtos.Where(x => x.Id == departmentDto.ParentDepartmentId).ToList()
+                };
+                return View(departmentRazorDto);
             }
             return NotFound();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DepartmentDelete(DepartmentDto departmentDto)
+        public async Task<IActionResult> DepartmentDelete(DepartmentRazorDto model)
         {
-            var response = await _departmentService.DeleteDepartmentByIdAsync(departmentDto.Id);
+            var response = await _departmentService.DeleteDepartmentByIdAsync(model.DepartmentDto.Id);
             if (response is not null && response.IsSuccess)
             {
                 return RedirectToAction(nameof(DepartmentIndex));

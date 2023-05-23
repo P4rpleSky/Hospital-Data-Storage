@@ -9,7 +9,7 @@
 			<h1>Список сотрудников отдела @(Context.Request.Query["departmentId"])</h1>
 		</div>
 		<div class="col-md-2 text-end">
-			<a asp-controller="Employee" asp-action="EmployeeCreate" asp-route-departmentId="@(Context.Request.Query["departmentId"])" class="btn btn-outline-primary">Добавить нового сотрудника</a>
+			<a asp-action="EmployeeCreate" asp-route-departmentId="@(Context.Request.Query["departmentId"])" class="btn btn-outline-primary">Добавить нового сотрудника</a>
 		</div>
 	</div>
 	<table class="table">

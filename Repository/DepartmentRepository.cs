@@ -4,6 +4,7 @@ using Kosta_Task.Models;
 using Kosta_Task.Models.Dtos;
 using Kosta_Task.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Kosta_Task.Repository
 {
@@ -20,13 +21,20 @@ namespace Kosta_Task.Repository
 
         public async Task<DepartmentDto> CreateUpdateDepartmentAsync(DepartmentDto departmentDto)
         {
+            if (departmentDto.ParentDepartmentName is not null)
+            {
+                var allowedParentDepartments = await this.GetDepartmentsExceptChildrenAsync(departmentDto.Id);
+                var parentDepartment = allowedParentDepartments.First(x => x.Name == departmentDto.ParentDepartmentName);
+                departmentDto.ParentDepartmentId = parentDepartment.Id;
+            }
             var department = _mapper.Map<DepartmentDto, Department>(departmentDto);
-            if (_db.Departments.Any(x => x.Id == department.Id))
+            if (department.Id != Guid.Empty)
             {
                 _db.Departments.Update(department);
             }
             else
             {
+                department.Id = Guid.NewGuid();
                 _db.Departments.Add(department);
             }
             await _db.SaveChangesAsync();
@@ -43,6 +51,9 @@ namespace Kosta_Task.Repository
                 return false;
             }
 
+            foreach (var childDepartment in _db.Departments.Where(x => x.ParentDepartmentId == departmentId))
+                _db.Departments.Remove(childDepartment);
+
             _db.Departments.Remove(department);
             await _db.SaveChangesAsync();
 
@@ -58,8 +69,36 @@ namespace Kosta_Task.Repository
 
         public async Task<IEnumerable<DepartmentDto>> GetDepartmentsAsync()
 		{
-			var departmentsList = await _db.Departments.ToListAsync();
+			var departmentsList = await _db.Departments.AsNoTracking().ToListAsync();
 			return _mapper.Map<List<DepartmentDto>>(departmentsList);
 		}
-	}
+
+        public async Task<IEnumerable<DepartmentDto>> GetDepartmentsExceptChildrenAsync(Guid parentId)
+        {
+            if (parentId == Guid.Empty)
+                return await this.GetDepartmentsAsync();
+
+            var parentDepartment = await _db.Departments.AsNoTracking().FirstAsync(x => x.Id == parentId);
+            var disallowedDepartmentIds = new HashSet<Guid>();
+            int counter;
+            do
+            {
+                counter = 0;
+                foreach (var department in _db.Departments.AsNoTracking())
+                {
+                    if ((parentDepartment.Id == department.Id ||
+                         parentDepartment.Id == department.ParentDepartmentId ||
+                         disallowedDepartmentIds.Any(x => x == department.ParentDepartmentId))
+                         && !disallowedDepartmentIds.Contains(department.Id))
+                    {
+                        counter++;
+                        disallowedDepartmentIds.Add(department.Id);
+                    }
+                }
+            } while (counter > 0);
+            var allowedDepartments = await this.GetDepartmentsAsync();
+            allowedDepartments = allowedDepartments.Where(x => !disallowedDepartmentIds.Contains(x.Id));
+            return allowedDepartments;
+        }
+    }
 }

@@ -4,7 +4,15 @@
 <link rel="stylesheet" href="~/css/department_tree.css" />
 
 
-<div>
+<div class="container p-4 border">
+    <div class="row pb-2">
+        <div class="col-md-10">
+            <h1>Структура предприятия @(Context.Request.Query["departmentId"])</h1>
+        </div>
+        <div class="col-md-2 text-end">
+            <a asp-action="DepartmentCreate" class="btn btn-outline-primary">Добавить новый отдел</a>
+        </div>
+    </div>
     <ul class="tree">
         @functions {
             async Task ShowTree(IEnumerable<DepartmentDto> departmentDtos, Guid parentId)
@@ -16,7 +24,17 @@
                             @if (departmentDtos.Any(x => x.ParentDepartmentId == departmentDto.Id))
                             {
                                 <details>
-                                    <summary><a asp-controller="Employee" asp-action="EmployeeIndex" asp-route-departmentId="@departmentDto.Id">@departmentDto.Name</a></summary>
+                                    <summary>
+                                        <div class="li-item">
+                                            <a class="redirect-button" asp-controller="Employee" asp-action="EmployeeIndex" asp-route-departmentId="@departmentDto.Id">@departmentDto.Name</a>
+                                            <a asp-action="DepartmentEdit" class="btn btn-success icon-btn" asp-route-departmentId="@departmentDto.Id">
+                                                <i class="fas fa-edit fa-2xs"></i>
+						                    </a>
+                                            <a asp-action="DepartmentDelete" class="btn btn-danger icon-btn" asp-route-departmentId="@departmentDto.Id">
+                                                <i class="fas fa-trash fa-2xs"></i>
+						                    </a>
+                                        </div>
+                                    </summary>
                                     @{
                                         await ShowTree(departmentDtos, departmentDto.Id);
                                     }
@@ -24,7 +42,15 @@
                             }
                             else
                             {
-                                <a asp-controller="Employee" asp-action="EmployeeIndex" asp-route-departmentId="@departmentDto.Id">@departmentDto.Name</a>
+                                <div class="li-item">
+                                    <a class="redirect-button" asp-controller="Employee" asp-action="EmployeeIndex" asp-route-departmentId="@departmentDto.Id">@departmentDto.Name</a>
+                                    <a asp-action="DepartmentEdit" class="btn btn-success icon-btn" asp-route-departmentId="@departmentDto.Id">
+                                        <i class="fas fa-edit fa-2xs"></i>
+						            </a>
+                                    <a asp-action="DepartmentDelete" class="btn btn-danger icon-btn" asp-route-departmentId="@departmentDto.Id">
+                                        <i class="fas fa-trash fa-2xs"></i>
+						            </a>
+                                </div>   
                             }
                         </li>
                     }
@@ -39,7 +65,14 @@
 
         <li>
             <details open>
-				<summary>@(rootDepartmentDto.Name)</summary>
+				<summary>
+                    <div class="li-item">
+                        <a class="redirect-button" asp-controller="Employee" asp-action="EmployeeIndex" asp-route-departmentId="@rootDepartmentDto.Id">@rootDepartmentDto.Name</a>
+                        <a asp-action="DepartmentEdit" class="btn btn-success" asp-route-departmentId="@rootDepartmentDto.Id">
+                            <i class="fas fa-edit fa-2xs"></i>
+					    </a>
+                    </div>
+                </summary>
                 @{
                     await ShowTree(Model, rootDepartmentDto.Id);
 			    }

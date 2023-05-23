@@ -49,6 +49,22 @@ namespace Kosta_Task.Controllers
             return _response;
         }
 
+        [HttpGet("parentId={parentId:Guid}")]
+        public async Task<ResponseDto> GetExceptChildren(Guid parentId)
+        {
+            try
+            {
+                var departmentDtos = await _departmentRepository.GetDepartmentsExceptChildrenAsync(parentId);
+                _response.Result = departmentDtos;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages.Add(ex.ToString());
+            }
+            return _response;
+        }
+
         [HttpPost]
         public async Task<ResponseDto> Post([FromBody] DepartmentDto departmentDto)
         {
