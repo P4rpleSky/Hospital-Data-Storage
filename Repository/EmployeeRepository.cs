@@ -32,13 +32,13 @@ namespace Kosta_Task.Repository
 			}
 			else
 			{
-				if (_db.Employees.Any(x => 
-					x.DepartmentId == employeeDto.DepartmentId &&
-					x.DocNumber == employeeDto.DocNumber && 
-					x.DocSeries == employeeDto.DocSeries))
-				{
-					throw new ArgumentException($"Сотрудник с номером документа \"{employeeDto.DocNumber}\" и серией документа \"{employeeDto.DocSeries}\" уже числится в данной организации!");
-                }
+				//if (_db.Employees.Any(x => 
+				//	x.DepartmentId == employeeDto.DepartmentId &&
+				//	x.DocNumber == employeeDto.DocNumber && 
+				//	x.DocSeries == employeeDto.DocSeries))
+				//{
+				//	throw new ArgumentException($"Сотрудник с номером документа \"{employeeDto.DocNumber}\" и серией документа \"{employeeDto.DocSeries}\" уже числится в данной организации!");
+    //            }
 				_db.Employees.Add(employee);
 			}
 			await _db.SaveChangesAsync();

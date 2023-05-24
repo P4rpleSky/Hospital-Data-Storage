@@ -27,7 +27,12 @@ namespace Kosta_Task.Repository
                 var parentDepartment = allowedParentDepartments.First(x => x.Name == departmentDto.ParentDepartmentName);
                 departmentDto.ParentDepartmentId = parentDepartment.Id;
             }
-            var department = _mapper.Map<DepartmentDto, Department>(departmentDto);
+
+            if (departmentDto.Code is not null)
+            {
+				departmentDto.Code = departmentDto.Code.ToUpper();
+			}
+			var department = _mapper.Map<DepartmentDto, Department>(departmentDto);
             if (department.Id != Guid.Empty)
             {
                 _db.Departments.Update(department);
@@ -52,9 +57,16 @@ namespace Kosta_Task.Repository
             }
 
             foreach (var childDepartment in _db.Departments.Where(x => x.ParentDepartmentId == departmentId))
+            {
+                foreach (var employee in _db.Employees.Where(x => x.DepartmentId == childDepartment.Id))
+                    _db.Employees.Remove(employee);
                 _db.Departments.Remove(childDepartment);
+            }
 
+            foreach (var employee in _db.Employees.Where(x => x.DepartmentId == department.Id))
+                _db.Employees.Remove(employee);
             _db.Departments.Remove(department);
+
             await _db.SaveChangesAsync();
 
             return true;

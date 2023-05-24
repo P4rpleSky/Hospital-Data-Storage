@@ -6,7 +6,7 @@
 <div class="container p-4 border">
 	<div class="row pb-2">
 		<div class="col-md-10">
-			<h1>Список сотрудников отдела @(Context.Request.Query["departmentId"])</h1>
+			<h1>Список сотрудников отдела "@(Context.Request.Query["departmentName"])"</h1>
 		</div>
 		<div class="col-md-2 text-end">
 			<a asp-action="EmployeeCreate" asp-route-departmentId="@(Context.Request.Query["departmentId"])" class="btn btn-outline-primary">Добавить нового сотрудника</a>

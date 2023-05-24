@@ -1,4 +1,6 @@
-﻿@model Kosta_Task.Models.Dtos.DepartmentRazorDto
+﻿@using Kosta_Task.Models.Dtos;
+@using Newtonsoft.Json;
+@model Kosta_Task.Models.Dtos.DepartmentRazorDto
 
 
 <form asp-action="DepartmentDelete">
@@ -29,7 +31,10 @@
             </div>
             <div class="col-10 pb-3">
                 <select disabled asp-for="DepartmentDto.ParentDepartmentName" class="form-control">
-                    <option selected>@Model.DepartmentDtosList.First().Name</option>
+                    @{
+                        var departmentsList = JsonConvert.DeserializeObject<List<DepartmentDto>>(Model.DepartmentsListJson);
+                    }
+                    <option selected>@departmentsList.First().Name</option>
                 </select>
             </div>
 

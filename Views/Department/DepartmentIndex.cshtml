@@ -7,7 +7,7 @@
 <div class="container p-4 border">
     <div class="row pb-2">
         <div class="col-md-10">
-            <h1>Структура предприятия @(Context.Request.Query["departmentId"])</h1>
+            <h1>Структура предприятия @(Context.Request.Query["departmentName"])</h1>
         </div>
         <div class="col-md-2 text-end">
             <a asp-action="DepartmentCreate" class="btn btn-outline-primary">Добавить новый отдел</a>
@@ -26,7 +26,7 @@
                                 <details>
                                     <summary>
                                         <div class="li-item">
-                                            <a class="redirect-button" asp-controller="Employee" asp-action="EmployeeIndex" asp-route-departmentId="@departmentDto.Id">@departmentDto.Name</a>
+                                            <a class="redirect-button" asp-controller="Employee" asp-action="EmployeeIndex" asp-route-departmentId="@departmentDto.Id" asp-route-departmentName="@departmentDto.Name">@departmentDto.Name</a>
                                             <a asp-action="DepartmentEdit" class="btn btn-success icon-btn" asp-route-departmentId="@departmentDto.Id">
                                                 <i class="fas fa-edit fa-2xs"></i>
 						                    </a>
@@ -43,7 +43,7 @@
                             else
                             {
                                 <div class="li-item">
-                                    <a class="redirect-button" asp-controller="Employee" asp-action="EmployeeIndex" asp-route-departmentId="@departmentDto.Id">@departmentDto.Name</a>
+                                        <a class="redirect-button" asp-controller="Employee" asp-action="EmployeeIndex" asp-route-departmentId="@departmentDto.Id"  asp-route-departmentName="@departmentDto.Name">@departmentDto.Name</a>
                                     <a asp-action="DepartmentEdit" class="btn btn-success icon-btn" asp-route-departmentId="@departmentDto.Id">
                                         <i class="fas fa-edit fa-2xs"></i>
 						            </a>

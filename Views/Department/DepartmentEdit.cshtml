@@ -1,10 +1,11 @@
 ﻿@using Kosta_Task.Models.Dtos;
+@using Newtonsoft.Json;
 @model DepartmentRazorDto
 
 
 <form asp-action="DepartmentEdit">
     @Html.Hidden("DepartmentDto.Id")
-    @Html.Hidden("DepartmentDtosList", Model.DepartmentDtosList)
+    @Html.Hidden("DepartmentsListJson")
     <br />
     <div class="container border p-3">
         <h1 class="text-primary">Редактировать отдел</h1>
@@ -34,7 +35,10 @@
             </div>
             <div class="col-10 pb-3">
                 <select asp-for="DepartmentDto.ParentDepartmentName" class="form-control">
-                    @foreach (var departmentDto in Model.DepartmentDtosList)
+                    @{
+                        var departmentsList = JsonConvert.DeserializeObject<List<DepartmentDto>>(Model.DepartmentsListJson);
+                    }
+                    @foreach (var departmentDto in departmentsList)
                     {
                         @if (departmentDto.Id == Model.DepartmentDto.ParentDepartmentId)
                         {

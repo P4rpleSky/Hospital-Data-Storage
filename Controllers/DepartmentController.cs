@@ -32,16 +32,16 @@ namespace Kosta_Task.Controllers
 
         public async Task<IActionResult> DepartmentCreate()
         {
-            var departmentDtos = new List<DepartmentDto>();
+            var departmentDtos = string.Empty;
             var response = await _departmentService.GetDepartmentsAsync();
             if (response is not null && response.IsSuccess)
             {
-                departmentDtos = JsonConvert.DeserializeObject<List<DepartmentDto>>(response.Result.ToString());
+                departmentDtos = response.Result.ToString();
             }
             var departmentRazorDto = new DepartmentRazorDto
             {
                 DepartmentDto = new DepartmentDto(),
-                DepartmentDtosList = departmentDtos
+                DepartmentsListJson = departmentDtos
             };
             return View(departmentRazorDto);
         }
@@ -69,12 +69,11 @@ namespace Kosta_Task.Controllers
             if (departmentResponse is not null && departmentResponse.IsSuccess &&
                 departmentsListResponse is not null && departmentsListResponse.IsSuccess)
             {
-                departmentDtos = JsonConvert.DeserializeObject<List<DepartmentDto>>(departmentsListResponse.Result.ToString());
                 var departmentDto = JsonConvert.DeserializeObject<DepartmentDto>(departmentResponse.Result.ToString());
                 var departmentRazorDto = new DepartmentRazorDto
                 {
                     DepartmentDto = departmentDto,
-                    DepartmentDtosList = departmentDtos
+                    DepartmentsListJson = departmentsListResponse.Result.ToString()
                 };
                 return View(departmentRazorDto);
             }
@@ -92,7 +91,7 @@ namespace Kosta_Task.Controllers
                 {
                     return RedirectToAction(nameof(DepartmentIndex));
                 }
-            }
+			}
             return View(model);
         }
 
@@ -104,16 +103,18 @@ namespace Kosta_Task.Controllers
             if (departmentResponse is not null && departmentResponse.IsSuccess &&
                 departmentsListResponse is not null && departmentsListResponse.IsSuccess)
             {
-                departmentDtos = JsonConvert.DeserializeObject<List<DepartmentDto>>(departmentsListResponse.Result.ToString());
                 var departmentDto = JsonConvert.DeserializeObject<DepartmentDto>(departmentResponse.Result.ToString());
-
+                
+                departmentDtos = JsonConvert.DeserializeObject<List<DepartmentDto>>(departmentsListResponse.Result.ToString());
+                departmentDtos = departmentDtos.Where(x => x.Id == departmentDto.ParentDepartmentId).ToList();
+                
                 if (departmentDto.ParentDepartmentId is null)
                     return NotFound();
 
                 var departmentRazorDto = new DepartmentRazorDto
                 {
                     DepartmentDto = departmentDto,
-                    DepartmentDtosList = departmentDtos.Where(x => x.Id == departmentDto.ParentDepartmentId).ToList()
+                    DepartmentsListJson = JsonConvert.SerializeObject(departmentDtos)
                 };
                 return View(departmentRazorDto);
             }
