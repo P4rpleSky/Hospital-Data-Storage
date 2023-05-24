@@ -33,6 +33,7 @@ namespace Kosta_Task.Models.Dtos
 		[MaxLength(6, ErrorMessage = "Номер документа не должен превышать 6 символов!")]
 		public string? DocNumber { get; set; }
 
+		[Required(ErrorMessage = "Это поле обязательно для заполнения!")]
 		[MaxLength(50, ErrorMessage = "Должность не должна превышать 10 символов!")]
 		public string Position { get; set; } = null!;
 
